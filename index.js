@@ -35,11 +35,30 @@ function verifyToken(req, res, next) {
         if(err)
             return res.status(403).json({auth: false, message: 'Token invalid'})
 
-        console.log(decoded);
-
         next();
     })
 }
+
+api.post('/', verifyToken, (req, res)=> {
+    if(!req.body)
+        return res.status(401).send('No customer present');
+
+    const { name, authPass, age } = req.body;
+
+    if(!name || !authPass)
+        return res.status(401).send('Name or Password not present');
+
+    if(db.some(x => x.name === name && x.authPass === authPass))
+        return res.status(401).send();
+    
+    const lastCustomer = db.reduce((acm, current) => acm.id > current.id ? acm : current);
+
+    const id = lastCustomer.id + 1;
+
+    db.push({id, name, age, authPass})
+    
+    return res.status(201).send();
+})
 
 api.get('/', verifyToken, (req, res) => {
     res.json(db);
