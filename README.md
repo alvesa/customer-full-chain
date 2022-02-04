@@ -14,5 +14,5 @@
 ```
 ## Container
 ```
-    docker run -d --name [container_name] -p 3000:3000 [image_name]
+    docker run -d --name [container_name] -p 3000:3000 -e SECRET_KEY=[your_key] [image_name]
 ```
