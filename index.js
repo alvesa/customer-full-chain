@@ -1,9 +1,8 @@
-import api from './server.js';
+import app from './server.js';
 import db from './data/customers.js';
-import jwt from 'jsonwebtoken';
-import dotenv from 'dotenv';
 
-dotenv.config();
+const api = app.api;
+const jwt = app.jwt;
 
 api.post('/auth', (req, res) => {
     if(!req.body)
