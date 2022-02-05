@@ -19,6 +19,6 @@ jobs:
     - name: Copying docker tag
       run: docker tag ${{secrets.DOCKER_AZURE_USER}}/api ${{secrets.DOCKER_AZURE_USER}}.azurecr.io/api
     - name: Docker auth
-      run: docker login --username ${{secrets.DOCKER_AZURE_USER}} -p ${{secrets.DOCKER_AZURE_PASSWORD}}
+      run: docker login ${{secrets.DOCKER_AZURE_USER}}.azurecr.io --username ${{secrets.DOCKER_AZURE_USER}} -p ${{secrets.DOCKER_AZURE_PASSWORD}}
     - name: Docker push
       run: docker push ${{secrets.DOCKER_AZURE_USER}}.azurecr.io/api
