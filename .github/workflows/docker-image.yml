@@ -1,4 +1,4 @@
-name: Docker Azure Image CI
+name: Docker Azure Image CI/CD
 
 on:
   push:
