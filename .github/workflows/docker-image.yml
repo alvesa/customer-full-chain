@@ -15,8 +15,8 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag alvesa:$(date +%s)
+      run: docker build -t ${{secrets.DOCKER_AZURE_USER}}/api .
     - name: Copying docker tag
-      run: docker tag alvesa:$(date +%s) alvesa.azurecr.io/api
+      run: docker tag ${{secrets.DOCKER_AZURE_USER}}/api ${{secrets.DOCKER_AZURE_USER}}.azurecr.io/api
     - name: Docker auth
       run: docker login --username ${{secrets.DOCKER_AZURE_USER}} --password ${{secrets.DOCKER_AZURE_PASSWORD}}
