@@ -8,15 +8,17 @@ api.post('/auth', (req, res) => {
     if(!req.body)
         return res.status(401).send();
     
-    const { name, authPass } = req.body;
+    const { userId, authPass } = req.body;
 
-    if(!name || !authPass)
+    if(!userId || !authPass)
         return res.status(403).send();
 
-    const user = db.some(x => x.name === name && x.authPass === authPass);
+    const user = db.some(x => x.userId === userId && x.authPass === authPass);
 
     if(user){
-        const token = jwt.sign({id: user.id, name}, process.env.SECRET_KEY, {
+        const { id } = user;
+
+        const token = jwt.sign({id, userId}, process.env.SECRET_KEY, {
             expiresIn: 600
         });
     
@@ -28,11 +30,11 @@ api.post('/auth', (req, res) => {
 function verifyToken(req, res, next) {
     const token = req.headers['x-access-token'];
     if(!token)
-        return res.status(401).json({auth: false, message: 'Token not present'});
+        return res.status(401).json({auth: false, message: 'Token is not present'});
 
     jwt.verify(token, process.env.SECRET_KEY, (err, decoded) => {
         if(err)
-            return res.status(403).json({auth: false, message: 'Token invalid'})
+            return res.status(403).json({auth: false, message: 'Invalid token'})
 
         next();
     })
@@ -42,19 +44,19 @@ api.post('/', verifyToken, (req, res)=> {
     if(!req.body)
         return res.status(401).send('No customer present');
 
-    const { name, authPass, age } = req.body;
+    const { userId, name, authPass, age } = req.body;
 
-    if(!name || !authPass)
-        return res.status(401).send('Name or Password not present');
+    if(!userId && (!name || !authPass))
+        return res.status(401).send('UserId, Name or Password not present');
 
-    if(db.some(x => x.name === name && x.authPass === authPass))
+    if(db.some(x => x.userId == userId && x.name === name && x.authPass === authPass))
         return res.status(401).send();
     
     const lastCustomer = db.reduce((acm, current) => acm.id > current.id ? acm : current);
 
     const id = lastCustomer.id + 1;
 
-    db.push({id, name, age, authPass})
+    db.push({id, userId, name, age, authPass})
     
     return res.status(201).send();
 })
