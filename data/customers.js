@@ -16,6 +16,12 @@ const customers = [
         name: 'New User',
         age: 10,
         authPass: '33333333'
+    },
+    {
+        id: 4,
+        name: 'New User 2',
+        age: 10,
+        authPass: '33333333'
     }
 ]
 
