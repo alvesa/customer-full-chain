@@ -30,7 +30,7 @@ api.post('/auth', (req, res) => {
 function verifyToken(req, res, next) {
     const token = req.headers['x-access-token'];
     if(!token)
-        return res.status(401).json({auth: false, message: 'Token is not present'});
+        return res.status(401).json({auth: false, message: 'Token not found'});
 
     jwt.verify(token, process.env.SECRET_KEY, (err, decoded) => {
         if(err)
